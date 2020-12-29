@@ -1,0 +1,31 @@
+sudo: false
+language: node_js
+node_js: "12"
+
+notifications:
+  email: false
+
+git:
+  submodules: false
+
+script:
+  - echo "skipping tests"
+
+stages:
+  - name: "Deploy to Firebase preview channel"
+    if: branch = master AND type = pull_request
+
+install:
+  - npm ci
+
+jobs:
+  include:
+    - stage: "Deploy to Firebase preview channel"
+      skip_cleanup: true
+      provider: firebase
+      project: olga-test-85eed
+      before_script:
+        - sudo apt-get install jq
+        - npm install firebase-tools -g
+        - npm run build:prod
+      script: bash deploy-to-firebase-preview-channels.sh
