@@ -3,7 +3,7 @@
 DEPLOY_TO_PREVIEW_CHANNEL_RESULT=$(firebase hosting:channel:deploy pr-$TRAVIS_PULL_REQUEST --expires 30d --token $FIREBASE_TOKEN --json)
 
 RESULT=`echo ${DEPLOY_TO_PREVIEW_CHANNEL_RESULT} | jq -r '.result'`
-RESULT_DATA=`echo ${RESULT} | jq -r '."fir-project-dc47e"'`
+RESULT_DATA=`echo ${RESULT} | jq -r '."olga-test-85eed"'`
 SITE=`echo ${RESULT_DATA} | jq -r '."site"'`
 URL=`echo ${RESULT_DATA} | jq -r '."url"'`
 EXPIRE_TIME_UTC=`echo ${RESULT_DATA} | jq -r .expireTime`
@@ -12,7 +12,7 @@ EXPIRE_TIME=$(TZ='GMT' date -d $EXPIRE_TIME_UTC +%c)
 NEW_COMMENT="Project: $SITE \n Url: $URL \n This link will expire at $EXPIRE_TIME"
 COMMENTS=$(curl -H "Authorization: token $GITHUB_TOKEN" -X GET "https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$TRAVIS_PULL_REQUEST/comments")
 
-SUBSTRING="Project: fir-project-dc47e"
+SUBSTRING="Project: olga-test-85eed"
 COMMENT_ID=-1
 
 for row in $(echo "${COMMENTS}" | jq -r '.[] | @base64'); do
